@@ -8,7 +8,7 @@ type Resp = {
   risk_score: number;
   issues: Issue[];
   suggested_prompt?: string | null;
-  lakera: { flagged: boolean; request_uuid?: string | null; breakdown?: any };
+  shield: { flagged: boolean; verdict: "PASS" | "REVIEW" | "FAIL"; confidence: number; score_breakdown?: Record<string, number> };
 };
 
 export default function Home() {
@@ -48,7 +48,7 @@ export default function Home() {
         risk_score: 1,
         issues: [{ type: "CLIENT_ERROR", severity: "HIGH", evidence: String(e?.message || e) }],
         suggested_prompt: null,
-        lakera: { flagged: true }
+        shield: { flagged: true, verdict: "FAIL", confidence: 1 }
       });
     } finally {
       setLoading(false);
@@ -61,7 +61,7 @@ export default function Home() {
     <div style={{ maxWidth: 980, margin: "32px auto", fontFamily: "system-ui", padding: 16 }}>
       <h1 style={{ marginBottom: 8 }}>PromptShield</h1>
       <p style={{ marginTop: 0, opacity: 0.8 }}>
-        Validate prompts for injection risk and gate with Lakera Guard before sending to an LLM.
+        Validate prompts for injection risk using a built-in local shield engine before sending to an LLM.
       </p>
 
       <div style={{ display: "grid", gap: 10 }}>
@@ -96,8 +96,8 @@ export default function Home() {
           <div style={{ display: "flex", gap: 14, alignItems: "center", flexWrap: "wrap" }}>
             <strong>{badge}</strong>
             <span>Risk: {(resp.risk_score * 100).toFixed(0)}%</span>
-            <span>Lakera: {resp.lakera.flagged ? "FLAGGED" : "PASS"}</span>
-            {resp.lakera.request_uuid ? <span>UUID: {resp.lakera.request_uuid}</span> : null}
+            <span>Shield: {resp.shield.verdict}</span>
+            <span>Confidence: {(resp.shield.confidence * 100).toFixed(0)}%</span>
           </div>
 
           <h3 style={{ marginBottom: 6 }}>Issues</h3>

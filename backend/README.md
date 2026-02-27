@@ -5,7 +5,7 @@ Run locally (without Docker):
 cd backend
 python -m venv .venv && source .venv/bin/activate
 pip install -e .
-cp .env.example .env   # then edit
+cp .env.example .env
 uvicorn app.main:app --reload --port 8000
 ```
 

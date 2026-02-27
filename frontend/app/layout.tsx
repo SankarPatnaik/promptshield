@@ -1,6 +1,6 @@
 export const metadata = {
   title: "PromptShield",
-  description: "Prompt validation + injection defense + Lakera guard gating"
+  description: "Prompt validation + injection defense + local shield scoring"
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
